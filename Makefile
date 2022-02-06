@@ -99,4 +99,4 @@ linux-build: fmt vet ## Run tests.
 release: 
 	git tag -a v${TAG} -m "v${TAG}"
 	git push origin v${TAG}
-	goreleaser release
+	goreleaser release --rm-dist
