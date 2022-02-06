@@ -1,0 +1,5 @@
+Digests
+
+Get digests from remote container registries.
+
+	cn digest get <image-uri>

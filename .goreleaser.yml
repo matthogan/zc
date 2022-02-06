@@ -1,0 +1,49 @@
+project_name: zccn
+env:
+  - GO111MODULE=on
+  - CGO_ENABLED=1
+before:
+  hooks:
+    - go mod tidy
+    #- go generate ./...
+builds:
+  - id: linux
+    binary: cn-linux-{{ .Arch }}
+    no_unique_dist_dir: true
+    main: ./cmd/cn
+    flags:
+      - -trimpath
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    goos:
+      - linux
+    goarch:
+      - amd64
+    env:
+      - CGO_ENABLED=0
+  - id: darwin-amd64
+    binary: cn-darwin-{{ .Arch }}
+    no_unique_dist_dir: true
+    main: ./cmd/cn
+    flags:
+      - -trimpath
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    goos:
+      - darwin
+    goarch:
+      - amd64
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^mock:'
